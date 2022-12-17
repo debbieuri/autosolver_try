@@ -2,7 +2,6 @@ import pyautogui as pp
 
 size=[10,10]
 bgc=(100,100,100)
-
 z=pp.screenshot()
 ss=0
 s=[]
@@ -42,7 +41,6 @@ for y in range(z.height):
 if s==[]:
     print('epic fail!!!')
     dfjghygf
-    
 ways=[[0,-1],[1,0],[0,1],[-1,0]]
 g=[[[False,False,False,False] for ii in range(size[1])] for i in range(size[0])]
 for x in range(size[0]):
@@ -65,14 +63,13 @@ for x in range(size[0]):
     for y in range(size[1]):
         rrrr=[]
         for r in range(4):
-            rrr=[0,0,0,0]
+            rrr=[False,False,False,False]
             for v in range(4):
                 if g[x][y][(r+v)%4]:
-                    rrr[v]=1
+                    rrr[v]=True
             if rrr not in rrrr:
                 rrrr.append(rrr)
                 rr[x][y][r]=True
-    
 tt=True
 while tt:
     for x in range(size[0]):
@@ -80,48 +77,38 @@ while tt:
             if not t[x][y]:
                 for i in range(4):
                     if a[x][y][i]==0:
-                        if x+ways[i][0]<0:
+                        if x+ways[i][0]<0 or y+ways[i][1]<0:
                             a[x][y][i]=-1
-                        elif y+ways[i][1]<0:
-                            a[x][y][i]=-1
-                        elif x+ways[i][0]>=size[0]:
-                            a[x][y][i]=-1
-                        elif y+ways[i][1]>=size[1]:
+                        elif x+ways[i][0]>=size[0] or y+ways[i][1]>=size[1]:
                             a[x][y][i]=-1
                         else:
-                            if a[x+ways[i][0]][y+ways[i][1]][i-2]==1:
-                                a[x][y][i]=1
-                            elif a[x+ways[i][0]][y+ways[i][1]][i-2]==-1:
-                                a[x][y][i]=-1
-
+                            if a[x+ways[i][0]][y+ways[i][1]][i-2]!=0:
+                                a[x][y][i]=a[x+ways[i][0]][y+ways[i][1]][i-2]
                 rrr=rr[x][y].copy()
                 for r in range(4):
                     for v in range(4):
-                        if g[x][y][(r+v)%4]:
+                        if g[x][y][(v-r)%4]:
                             if a[x][y][v]==-1:
-                                rrr[r]=0
+                                rrr[r]=False
                                 break
                         else:
                             if a[x][y][v]==1:
-                                rrr[r]=0
+                                rrr[r]=False
                                 break
-
                 if sum(rrr)==1:
+                    q=rrr.index(True)
                     for v in range(4):
-                        if g[x][y][(rrr.index(1)+v)%4]:
+                        if g[x][y][(v-q)%4]:
                             a[x][y][v]=1
                             h[x][y][v]=True
                         else:
                             a[x][y][v]=-1
                             h[x][y][v]=False
                     t[x][y]=True
-                    pp.moveTo(s[0]+x*ss*3,s[1]+y*ss*3)
-                    q=rrr.index(1)
-                    if q&1:#WHY THIS ?????????????????????????????????????why dos it happen? :((( ?????????????????????????
-                        q=(q+2)%4#:(
-                    for _ in range(q):
-                        pp.click()
-
+                    if q!=0:
+                        pp.moveTo(s[0]+x*ss*3,s[1]+y*ss*3)
+                        for _ in range(q):
+                            pp.click()
     tt=False
     for x in range(size[0]):
         for y in range(size[1]):
